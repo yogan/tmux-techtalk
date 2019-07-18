@@ -34,7 +34,7 @@ Short forms:
 
 TODO: ensure those are defaults (not customized mappings)
 
-- `<prefix>` ? → `list-keys` → show all defined key bindings
+- `<prefix>` `<?>` → `list-keys` → show all defined key bindings
   - move around cursor keys or vi-style
   - start search with `</>`
 
