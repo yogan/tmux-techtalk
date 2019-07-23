@@ -1,42 +1,18 @@
-# tmux TechTalk
+# tmux Tech Talk
 
-## What is tmux
+Slides for a tech talk on [tmux](https://github.com/tmux/tmux).
 
-- [tmux](https://github.com/tmux/tmux) is a terminal multiplexer
-- similar to [GNU Screen](https://www.gnu.org/software/screen/)
-- basically a window manager for the terminal
+The slides are rendered in a terminal via
+[patat](https://github.com/jaspervdj/patat). The slides themselves are written
+in *Markdown*, so they are also [readable right here](slides.md).
 
-## Terminal, Shell, Command Line
+## Setup
 
-- TODO explain this shit
-
-## Sessions
-
-- detaching
-- listing
-- (re-)attaching
-
-### Good Practice: Naming Sessions
-
-- `tmux new-session -s <name>`
-- `tmux attach-session -t <name>`
-- `tmux list-lessions`
-
-Short forms:
-
-- `tmux new  -s <name>`
-- `tmux attach -t <name>`
-- `tmux ls`
-
-## Windows, Panes
-
-## various commands / keys
-
-TODO: ensure those are defaults (not customized mappings)
-
-- `<prefix>` `<?>` → `list-keys` → show all defined key bindings
-  - move around cursor keys or vi-style
-  - start search with `</>`
-
-## tmuxinator
-
+- [install patat](https://github.com/jaspervdj/patat#installation), preferably
+  from source
+  - install
+    [Stack](https://docs.haskellstack.org/en/stable/README/#how-to-install)
+    *(Haskell package manager)*
+  - `cd ~/src && git clone git@github.com:jaspervdj/patat.git`
+  - `stack setup && stack install` *(this takes quite some time)*
+- `patat -w slides.md`
