@@ -10,9 +10,9 @@ in *Markdown*, so they are also [readable right here](slides.md).
 
 - [install patat](https://github.com/jaspervdj/patat#installation), preferably
   from source
-  - install
-    [Stack](https://docs.haskellstack.org/en/stable/README/#how-to-install)
-    *(Haskell package manager)*
-  - `cd ~/src && git clone git@github.com:jaspervdj/patat.git`
-  - `stack setup && stack install` *(this takes quite some time)*
+    - install
+      [Stack](https://docs.haskellstack.org/en/stable/README/#how-to-install)
+      *(Haskell package manager)*
+    - `cd ~/src && git clone git@github.com:jaspervdj/patat.git`
+    - `stack setup && stack install` *(this takes quite some time)*
 - `patat -w slides.md`
