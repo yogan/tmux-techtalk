@@ -45,10 +45,10 @@ patat:
 
 
 
-# Terminal ⇄ Shell ⇄ Command Line
+# Terminal ⇄ Shell ⇄ Command Line ⇄ CLI ⇄ Console
 
 
-## *$***TERM**inology
+## **TERM**inology
 
 ```text
          _________
@@ -66,10 +66,12 @@ patat:
 
 ```
 
+Command line, terminal, shell, console – they are all the same, right?
 
-## Terminals
+Well, actually…
 
-### History
+
+## Terminals: History
 
 - provides *input*/*output* to a computer system
     - external hardware device
@@ -79,14 +81,14 @@ patat:
     - *TTY* actually stands for *TeleTYpewriter*
 - shift to *visual display units* (VDUs) in late 60s / early 70s
     - nicknamed "glass TTYs"
-    - possibly to set *cursor position*
+    - possibility to set *cursor position*
     - introduction of *control codes*:
         - `^M`: carriage return, `^J`: line-feed, `^G`: bell
         - *escape sequences*, like *ANSI escape sequences*:
             - `ESC 4 ; 9 H`: move cursor to row 4, column 9
 
 
-## Terminal History (cont.)
+## Terminals: History (cont.)
 
 - dozens of terminal manufacturers
     - Lear-Siegler, Hewlett Packard, IBM, DEC, Televideo, …
@@ -101,30 +103,125 @@ patat:
     - command codes compliant with *ANSI X3.64*
     - emulated by pretty much every modern terminal emulator
 - DEC *VT220* (1983)
-    - more crazy stuff, but we'll have to skip that…
+    - more crazy stuff, but we'll have to skip that today…
 
 
-## Modern Terminals (TTYs)
+## Terminal Emulators
 
-TODO cont. here
+- when we say *terminal* today, we usually mean a *terminal emulator*
 
-- when we say *terminal* today, we usually mean *terminal emulator*
-- software implementations (VT220???) TODO
-- notable examples:
-    - *Linux*: Linux console, xterm, (u)rxvt, GNOME Terminal, konsole
-    - *macOS*: Terminal, iTerm2, Terminator
-    - *Windows*: Windows Console, Windows Terminal, mintty, PuTTY, ConEmu
+- the *POSIX terminal interface* defines the expected behavior of a *Unix* terminal
+    - *dumb* terminal: I/O as *character streams*
+
+    - *capabilities*
+        - *terminfo*, *termcap* (databases) / (*n*)*curses* (library)
+        - *control chars* / *escape codes* (text attribs, colors, window title, …)
+    - *job control*
+        - `<^Z>` → `SIGTSTP`, `<^C>` → `SIGINT`
+        - `fg`, `bg` (*shell* commands)
+
+
+## Terminal Emulators (cont.)
+
+Terminal emulators implement the features of physical terminals (and more).
+
+- interpretation of *control characters* / *escape sequences*
+
+- in Unix, there are *pseudoterminals* (*PTYs*), which abstract this
+    (Linux: UNIX 98 pseudoterminals `/dev/pts/*`)
+
+- Window added the [ConPTY API](https://devblogs.microsoft.com/commandline/windows-command-line-introducing-the-windows-pseudo-console-conpty/) in 1803
+    - without that API, terminal emulators had to implement the
+        pseudoterminal functionality on their own
+
+## stty
+
+- Unix tool `stty` to get/set terminal capabilities
+- read `man 1 stty` if you want to understand its cryptic output and commands
+
+```sh
+> stty -a
+speed 38400 baud; rows 77; columns 65; line = 0;
+intr = ^C; quit = ^\; erase = ^?; kill = ^U; eof = ^D; # …
+-parenb -parodd -cmspar cs8 -hupcl -cstopb cread -imaxbel iutf8 # …
+```
+
+If you just want something to play around with, try:
+
+```sh
+> stty -a
+> stty cols 20
+> stty -a
+```
+
+**Note:** *you will probably never ever have to deal with this, but it's cool. ;-)*
+
+
+## Notable Terminal Emulators
+
+- *Linux*: Linux console, xterm, (u)rxvt, GNOME Terminal, konsole
+- *macOS*: Terminal, iTerm2, Terminator
+- *Windows*: (Windows Console), Windows Terminal, mintty, PuTTY, ConEmu
+
+### Distinctive Features
+
+- *Ūñíçø𝐝𝑒* support (hopefully), maybe even Emoji 💩 (not for me)
+- extended term caps: 256 colors / 24 bit colors, images
+- look and feel
+    - mouse selection / copy / paste
+    - keyboard shortcuts
+    - customization (color schemes, fonts)
+- handling of multiple instances (tabs)
+- simplified launch of different *shells*
+- integrated applications
+    - e.g. *PuTTY* is both a *terminal emulator* and a *ssh client*
 
 
 ## Shell
 
-TODO
+- a *shell* is a user interface to the operating system
+    - can be used *interactively* or automated via *scripts*
+    - different shells have their own syntax / scripting languages
+    - examples: `bash`, `zsh`, `fish`, `PowerShell`, `cmd.exe`
+
+- when a shell is used *interactively*, it runs *inside a terminal (emulator)*
+    - standard I/O streams `stdin`, `stdout`, and `stderr` are by default
+      connected to the surrounding terminal
+
+- shells and terminals can be arbitrarily mixed):
+    - `fish` shell inside an `xterm` terminal
+    - `bash` shell inside an `mintty` terminal
+    - `PowerShell` instance inside `ConEmu`
+    - …
 
 
-## Command Line
+## Command Line / Command Line Interface (CLI)
 
-TODO
+- the *command line* is the main user interface of any *shell*
 
+- offers *entering* / *editing* text (often via the `readline` lib) that gets
+  interpreted according to the shell syntax
+
+- non-shell programms can also offer their own *CLIs*
+    - *REPLs* of programming languages (`node`, `python`, …)
+    - *parameters* / *options* of a program are also a form of CLI
+      (e.g. `git log --one-line -10`)
+
+
+## Console
+
+A not well-defined term.
+
+Often means the combination of a physically connected keyboard and monitor, and
+some form of terminal that runs in text-mode (fullscreen, outside of a graphical
+desktop environment), e.g. the *Linux virtual console*.
+
+Also commonly used to describe any form of terminal with some shell running
+inside it, e.g. the *Windows Command Prompt* running `cmd.exe`.
+
+Also referred to when an application is sending text to an output stream like
+`stdout`/`stderr` ("printing something to the *console*"), which often, but not
+necessarily, leads to the text being displayed in the terminal.
 
 
 # Sessions
