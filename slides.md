@@ -31,8 +31,16 @@ patat:
 ## What is tmux?
 
 - [tmux](https://github.com/tmux/tmux) is a terminal multiplexer
-- similar to [GNU Screen](https://www.gnu.org/software/screen/)
-- basically a window manager for the terminal
+    - similar to [GNU Screen](https://www.gnu.org/software/screen/)
+- a window manager for the terminal
+    - split windows
+    - layouts
+- detachable sessions
+    - keep shell programs running
+        - on a server, after logging off
+        - locally, after closing a terminal
+    - re-attach later, find everything as you left it
+- scripting / automation / customization / taka-taka
 
 
 ## Terminal, Shell, Command Line
