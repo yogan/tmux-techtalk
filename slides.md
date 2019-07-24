@@ -28,6 +28,7 @@ patat:
   ╚═════════════════════════════════════════════════════════════════╝
 ```
 
+
 ## What is tmux?
 
 - [tmux](https://github.com/tmux/tmux) is a terminal multiplexer
@@ -43,9 +44,86 @@ patat:
 - scripting / automation / customization / taka-taka
 
 
-## Terminal, Shell, Command Line
 
-- TODO explain this shit
+# Terminal ⇄ Shell ⇄ Command Line
+
+
+## *$***TERM**inology
+
+```text
+         _________
+        / ======= \
+       / __________\
+      |  _________  |
+      | |>_       | |
+      | |         | |
+      | |_________| |
+      \=____________/
+      / """"""""""" \
+     / ::::::::::::: \
+    (_________________)    
+
+
+```
+
+
+## Terminals
+
+### History
+
+- provides *input*/*output* to a computer system
+    - external hardware device
+    - connection typically via serial port or null modem cables
+- originated in the 60s (IBM / DEC mainframes)
+    - *hard-copy* terminals: typewriters / printers (*output* ≅ paper)
+    - *TTY* actually stands for *TeleTYpewriter*
+- shift to *visual display units* (VDUs) in late 60s / early 70s
+    - nicknamed "glass TTYs"
+    - possibly to set *cursor position*
+    - introduction of *control codes*:
+        - `^M`: carriage return, `^J`: line-feed, `^G`: bell
+        - *escape sequences*, like *ANSI escape sequences*:
+            - `ESC 4 ; 9 H`: move cursor to row 4, column 9
+
+
+## Terminal History (cont.)
+
+- dozens of terminal manufacturers
+    - Lear-Siegler, Hewlett Packard, IBM, DEC, Televideo, …
+    - different incompatible command sequences
+    - *Unix* systems introduce `termcap`/`terminfo` files and
+      the `$TERM` variable to deal with this mess
+- DEC *VT100* (1978)
+    - one of the most common terminals
+    - "advanced" features:
+        - text formatting: blink, bold, reverse video, underline
+        - box-drawing characters: `┘ ┐ ┌ └ ┼ ─ ├ ┤ ┴ ┬ │`
+    - command codes compliant with *ANSI X3.64*
+    - emulated by pretty much every modern terminal emulator
+- DEC *VT220* (1983)
+    - more crazy stuff, but we'll have to skip that…
+
+
+## Modern Terminals (TTYs)
+
+TODO cont. here
+
+- when we say *terminal* today, we usually mean *terminal emulator*
+- software implementations (VT220???) TODO
+- notable examples:
+    - *Linux*: Linux console, xterm, (u)rxvt, GNOME Terminal, konsole
+    - *macOS*: Terminal, iTerm2, Terminator
+    - *Windows*: Windows Console, Windows Terminal, mintty, PuTTY, ConEmu
+
+
+## Shell
+
+TODO
+
+
+## Command Line
+
+TODO
 
 
 
