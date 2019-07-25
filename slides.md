@@ -461,27 +461,65 @@ Short forms:
 - `tmux at -t <name>`
 - `tmux ls`
 
-### Session names
+### Session Names
 
-- when no *session name* is passed, *tmux* will just number the sessions when
-  they are created
+- when no *session name* is passed, *tmux* will just assign numbers when
+  creating sessions
+- existing sessions can be rename with `rename-session`
 - the `attach` command defaults to the last recently used unattached session
 
 
-# Windows, Panes
+# Windows & Panes
+
+## Windows
+
+- *tmux* has a tabbed interface (similar to browsers, IDEs, etc.)
+    - confusingly, *tmux* calls those tabs *windows*
+    - *windows* belong to a *session*
+    - the tmux *status bar* lists the windows
+- each *window* has a *name*
+    - default name when windows is created (usually the shell name)
+    - can be renamed (`rename-window` / `<prefix>` `<,>`)
+- each *window* has an *index*
+    - the index defines the position in the status bar
+    - index can be used to directly switch to a window
+    - new windows are assigned the next free index
+    - there might be "holes"
 
 
-# various commands / keys
+## Managing Windows
 
-TODO: ensure those are defaults (not customized mappings)
+- *create* new windows
+    - `<prefix>` `<c>` → `new-window`
+    - starts your login shell by default
 
-- `<prefix>` `<?>` → `list-keys` → show all defined key bindings
-    - move around cursor keys or vi-style
-    - start search with `</>`
+- *close* windows
+    - exit all applications / shells within
+    - `<prefix>` `<&>` → kill current window (prompts)
+    - `kill-window -t <index>` → kill window with given index (**no prompt!**)
+    - closing a window does not change indices remaining windows (→ hole)
+
+- *navigate* between windows
+    - `<prefix>` `<n>` → `next-window`
+    - `<prefix>` `<p>` → `previous-window`
+    - `<prefix>` `<l>` → jump to last active window
+    - `<prefix>` `<0>–<9>` → jump to window with given index
+
+- *move* windows
+    - `<prefix>` `<.>` → move window (prompts for index)
+    - index has to be free
+
+
+## Panes
+
+**CONTINUE** here
+
+## SOMEWHERE IN PANES
 
 - `<prefix>` `<!>` → `break-pane` → move *pane* to its own *window*
 
-- `<prefix>` `<s>` → `choose-tree` → show tree of sessions, windows, and panes
+
+
 
 
 # Buffers
@@ -505,7 +543,7 @@ How to make delicious copypasta using only your keyboard (completely organic).
 - `<space>` to *start selection*
 - *move cursor* to mark *end* position
 - `<enter>` to copy selection into *buffer*
-- `<esc>` at any point to cancel
+- `<esc>`/`<q>` at any point to cancel
 
 
 ## *Paste* Text from a *tmux Buffer*
@@ -552,6 +590,39 @@ How to make delicious copypasta using only your keyboard (completely organic).
 All tmux commands that produce output (e.g. `list-keys`, `list-windows`, …)
 always start in *copy mode*. This is especially handy as you can start searching
 right away with `</>` (no prefix required).
+
+
+
+# Getting Help
+
+
+## Documentation
+
+- `man tmux`
+    - pretty heavy, but it's the definite reference
+    - [tmux manpage](http://man.openbsd.org/OpenBSD-current/man1/tmux.1) online version
+
+- *The Tao of tmux* E-Book (Kindle) by Tony Narlock
+    - free online version: [The Tao of tmux](https://leanpub.com/the-tao-of-tmux/read)
+
+- [tmux FAQ](https://github.com/tmux/tmux/wiki/FAQ)
+
+### Quick Tip
+
+- `<prefix>` `<?>` → `list-keys`
+    - shows all defined *key bindings*
+    - use *search* (`</>`), or just read whats available
+
+
+
+## Selected Cool Commands
+
+- `<prefix>` `<s>` → `choose-tree`
+    - shows *tree* of *sessions*, *windows*, and *panes*
+    - easily jump around
+- `<prefix>` `<f>` → `find-window`
+    - search for window names, titles, and *visible content*
+    - same tree as in `choose-tree`, but filtered
 
 
 
