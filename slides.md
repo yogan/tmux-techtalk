@@ -612,21 +612,21 @@ right away with `</>` (no prefix required).
 
 ## Documentation
 
-- `man tmux`
+- [manpage](http://man.openbsd.org/OpenBSD-current/man1/tmux.1) (`man tmux`)
     - pretty heavy, but it's the definite reference
-    - [tmux manpage](http://man.openbsd.org/OpenBSD-current/man1/tmux.1) online version
 
-- *The Tao of tmux* E-Book (Kindle) by Tony Narlock
-    - free online version: [The Tao of tmux](https://leanpub.com/the-tao-of-tmux/read)
+- [The Tao of tmux](https://leanpub.com/the-tao-of-tmux/read)
+    - E-Book (Kindle) by Tony Narlock, free online version (see link)
 
 - [tmux FAQ](https://github.com/tmux/tmux/wiki/FAQ)
 
-### Quick Tip
+### Pro Tips
 
 - `<prefix>` `<?>` → `list-keys`
     - shows all defined *key bindings*
     - use *search* (`</>`), or just read whats available
 
+- `list-commands` → prints every tmux command and its arguments
 
 
 ## Selected Cool Commands
