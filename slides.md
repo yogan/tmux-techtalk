@@ -698,14 +698,22 @@ right away with `</>` (no prefix required).
 - `list-commands` → prints every tmux command and its arguments
 
 
+
+# Bonus Goodies
+
+
 ## Selected Cool Commands
 
 - `<prefix>` `<s>` → `choose-tree`
     - shows *tree* of *sessions*, *windows*, and *panes*
     - easily jump around
+
 - `<prefix>` `<f>` → `find-window`
     - search for window names, titles, and *visible content*
     - same tree as in `choose-tree`, but filtered
+
+- `<prefix>` `<t>` → `clock-mode`
+    - because we can
 
 
 ## Scripting
@@ -731,6 +739,48 @@ done
 ```
 
 
-# tmuxinator
+## tmuxinator
 
-Is cool, yo. # TODO
+Automatically create sessions based on a *yaml* configuration.
+
+```yaml
+name: yannis
+root: ~/work/yannis/shc-yannis
+startup_window: git
+windows:
+    - run:
+        panes:
+            - cd frontend; npm run start
+            - cd mock-server; npm run build && npm run start-bootstrapped
+    - ut:
+        panes:
+            - cd frontend; npm run test
+            - cd mock-server; npm run test
+    - git:
+        panes:
+            - git status
+            - git lag --branches -20
+```
+
+
+## kthxbye
+
+```text
+
+
+
+
+          .O°o. .o°O________________________________O°o. .o°O.
+          .°o.O.o° ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯.°o.O.o°
+                   ░░░░░╔══╦╗░░░░╔╗░░░░░░╔╗╔╗░░░░░░░░
+                   ░░░░░╚╗╔╣╚╦═╦═╣║╔╗░░░░║║║╠═╦╦╗░░░░
+                   ░░░░░░║║║║╠╝║║║╠╝║░░░░║╚╝║║║║║░░░░
+                   ░░░░░░║║║║║║║║║╔╗╣░░░░╚╗╔╣║║║║░░░░
+                   ░░░░░░╚╝╚╩╩═╩╩╩╝╚╝░░░░░╚╝╚═╩═╝░░░░
+          .O°o. .o°O________________________________O°o. .o°O.
+          .°o.O.o° ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯.°o.O.o°..          
+
+
+
+
+```
