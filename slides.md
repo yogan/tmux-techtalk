@@ -45,7 +45,7 @@ patat:
 
 
 
-# Terminal ⇄ Shell ⇄ Command Line ⇄ CLI ⇄ Console
+# Terminal ⇄ Shell ⇄ Command Line ⇄ CLI ⇄ TUI ⇄ Console
 
 
 ## **TERM**inology
@@ -66,7 +66,7 @@ patat:
 
 ```
 
-Command line, terminal, shell, console – they are all the same, right?
+*Command line*, *terminal*, *shell*, *console* – they are all the same, right?
 
 Well, actually…
 
@@ -110,7 +110,12 @@ Well, actually…
 
 - when we say *terminal* today, we usually mean a *terminal emulator*
 
+- they offer *input* and *output* functionality like traditional *physical terminals*
+
+- they do **not** offer any *CLI*/*prompt*/*language*/… – a *shell* does that!
+
 - the *POSIX terminal interface* defines the expected behavior of a *Unix* terminal
+
     - *dumb* terminal: I/O as *character streams*
 
     - *capabilities*
@@ -118,21 +123,25 @@ Well, actually…
         - *control chars* / *escape codes* (text attribs, colors, window title, …)
     - *job control*
         - `<^Z>` → `SIGTSTP`, `<^C>` → `SIGINT`
-        - `fg`, `bg` (*shell* commands)
+        - *terminal* handles control keys, job management is done by the *shell*
+        - `fg`, `bg`, `jobs` (*shell* commands)
 
 
-## Terminal Emulators (cont.)
+## Terminal Implementation / API
 
-Terminal emulators implement the features of physical terminals (and more).
+- Unix systems provide `tty` *devices*, controlled via `ioctl` system calls
 
-- interpretation of *control characters* / *escape sequences*
+- *terminal emulators* use those to implement their behavior
+  (example: `ioctl(tty_fd, TIOCSWINSZ, &winsize);` set number of cols/rows)
 
-- in Unix, there are *pseudoterminals* (*PTYs*), which abstract this
-    (Linux: UNIX 98 pseudoterminals `/dev/pts/*`)
+- *shells* and text-based applications (*TUIs*) also use these APIs
+  (often via libraries like (*n*)*curses*)
 
-- Window added the [ConPTY API](https://devblogs.microsoft.com/commandline/windows-command-line-introducing-the-windows-pseudo-console-conpty/) in 1803
-    - without that API, terminal emulators had to implement the
-        pseudoterminal functionality on their own
+- Linux uses (UNIX 98) *pseudoterminals* (*PTYs*) via `/dev/pts/*`
+
+- Windows added the [ConPTY API](https://devblogs.microsoft.com/commandline/windows-command-line-introducing-the-windows-pseudo-console-conpty/) in 1803
+    - without that API, terminal emulators had to implement the full
+      pseudoterminal functionality on their own
 
 ## stty
 
@@ -165,10 +174,12 @@ If you just want something to play around with, try:
 
 ### Distinctive Features
 
-- *Ūñíçø𝐝𝑒* support (hopefully), maybe even Emoji 💩 (not for me)
-- extended term caps: 256 colors / 24 bit colors, images
+- *Ūñíçø𝐝𝑒* support (hopefully)
+- maybe even *Emoji* 💩 (not for me)
+- extended term *capabilities*: 256 colors / 24 bit colors, images
+
 - look and feel
-    - mouse selection / copy / paste
+    - mouse selection, copy / paste
     - keyboard shortcuts
     - customization (color schemes, fonts)
 - handling of multiple instances (tabs)
@@ -179,45 +190,81 @@ If you just want something to play around with, try:
 
 ## Shell
 
+- when we say *shell*, we usually mean a *command-line shell*
+
 - a *shell* is a user interface to the operating system
     - can be used *interactively* or automated via *scripts*
     - different shells have their own syntax / scripting languages
     - examples: `bash`, `zsh`, `fish`, `PowerShell`, `cmd.exe`
 
-- when a shell is used *interactively*, it runs *inside a terminal (emulator)*
+- when a shell is used *interactively*, it runs within a *terminal (emulator)*
     - standard I/O streams `stdin`, `stdout`, and `stderr` are by default
       connected to the surrounding terminal
+    - shell does not "see" the output of commands it runs
+      → *scrollback* (output history) is a *terminal* concept!
+    - *terminal control* is passed to started applications
 
 - shells and terminals can be arbitrarily mixed):
     - `fish` shell inside an `xterm` terminal
-    - `bash` shell inside an `mintty` terminal
+    - `bash` shell inside a `mintty` terminal
     - `PowerShell` instance inside `ConEmu`
     - …
 
 
 ## Command Line / Command Line Interface (CLI)
 
-- the *command line* is the main user interface of any *shell*
+- the *command line interface* is the main user interface of any *shell*,
+  but also other programs
 
-- offers *entering* / *editing* text (often via the `readline` lib) that gets
-  interpreted according to the shell syntax
+- shells usually print some kind of *prompt* near the place where the user
+  can enter *commands*
 
-- non-shell programms can also offer their own *CLIs*
+- offers *entering* / *editing* a *command line* (often via the `readline` lib)
+  that gets *interpreted* according to the *shell language* syntax
+
+- convenience features like *completion*, *command history*, *keyboard shortcuts*, …
+
+- *non-shell programs* can also offer their own *CLIs*
+
     - *REPLs* of programming languages (`node`, `python`, …)
+    - database clients
     - *parameters* / *options* of a program are also a form of CLI
       (e.g. `git log --one-line -10`)
 
 
+## Text-based User Interface (TUI)
+
+- a *text-based user interface (TUI)* is a form of user interface used by
+  applications that makes only use of text (including drawing characters)
+  instead of graphical UI elements (in contrast to to *GUIs*)
+
+- run inside *terminals*, usually started from a *shell*
+
+- often fill the whole terminal
+
+- re-create UI elements known from GUIs like menus and windows by using
+  *box-drawing characters*, *foreground*/*background* colors
+
+- can be implemented by sending (ANSI) *escape sequences* to put the cursor
+  at arbitrary screen positions, set colors, etc.
+    - usually via a library like *ncurses*
+    - sends correct control characters depending on the used terminal
+
+- notable examples: `vim`, `mutt`, MS-DOS Editor, Midnight Commander,
+  `irssi`, `patat` (what you see right now), and also: `tmux`!
+
+
 ## Console
 
-A not well-defined term.
+**Console is not a very well-defined term.**
 
-Often means the combination of a physically connected keyboard and monitor, and
-some form of terminal that runs in text-mode (fullscreen, outside of a graphical
-desktop environment), e.g. the *Linux virtual console*.
+The term *console* is often used to describe the combination of a physically
+connected keyboard and monitor, and some form of terminal that runs in text-mode
+(fullscreen, outside of a graphical desktop environment), e.g. the *Linux
+virtual console*.
 
-Also commonly used to describe any form of terminal with some shell running
-inside it, e.g. the *Windows Command Prompt* running `cmd.exe`.
+Another common meaning is any form of (software-based) terminal with some shell
+running inside it, e.g. the *Windows Command Prompt* running `cmd.exe`.
 
 Also referred to when an application is sending text to an output stream like
 `stdout`/`stderr` ("printing something to the *console*"), which often, but not
