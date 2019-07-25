@@ -402,14 +402,51 @@ Typical scenarios for this are:
     - can be re-evaluated later with the `source-file` command
 
 
+
+# Let's Do This!
+
+
+## Controlling tmux
+
+- tmux *CLI*
+    - `tmux some-command [--maybe-with-options]`
+    - can be executed in any shell – within or outside of a tmux session
+
+- tmux *key bindings*
+    - always begin with a *prefix* key combination
+    - default prefix: `<^B>` (this means `<Ctrl>` + `<b>` at the same time)
+    - `screen` veterans remap this to `<^A>`: `set-option -g prefix C-a`
+    - in the following, `<prefix>` `<key>` means:
+      press *prefix* combo (e.g. `<Ctrl>` + `<b>`), release, press `<key>`
+
+- tmux *command prompt*: in running client, `<prefix>` `<:>`
+    - enter any tmux *command* to execute it
+    - has basic completion (`<tab>`) and history navigation (`<up>`/`<down>`)
+
+- automated via *config file* (`.tmux.conf`)
+    - is just a list of tmux *commands* executed sequentially
+    - same syntax as in *command prompt* or when binding keys
+    - evaluate a config while tmux is running: `source-file ~/.tmux.conf`
+
+
+## The Basics
+
+### Create Session, Detach, Re-Attach
+
+- start new *tmux* session and attach: `tmux`
+- single window, running a fresh instance of your default *shell*
+- do shell stuff (ideally start anything that keeps running, e.g. `vim` or `top`)
+- *detach*: `<prefix>` `<d>` → *tmux* prints `[detached (from session n)]`
+- *re-attach*: `tmux attach` → yay, my shell thingy is alive and kicking!
+
+### Destroy Session
+
+- when attached, close any running application
+- also close the shell (`exit` / `<^D>`) → *tmux* prints `[exited]`
+- `tmux attach` → *tmux* prints `no sessions`
+
+
 ## Session Commands
-
-- creating
-- attaching / detaching
-- listing
-
-
-## Session Command Syntax
 
 Long forms:
 
@@ -424,6 +461,11 @@ Short forms:
 - `tmux at -t <name>`
 - `tmux ls`
 
+### Session names
+
+- when no *session name* is passed, *tmux* will just number the sessions when
+  they are created
+- the `attach` command defaults to the last recently used unattached session
 
 
 # Windows, Panes
