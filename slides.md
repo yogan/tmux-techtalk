@@ -304,12 +304,11 @@ is to GUI applications.
 *tmux*, like *terminal emulators*, is a software-based terminal.
 
 However, it is kind of special: it needs *another terminal* to run inside.
-So you usually start *tmux* from a shell, running in a terminal.
-To get another terminal in your terminal, yo.
+You usually start *tmux* from a shell, running in a terminal.
 
-It provides (one or many) *virtual terminals*, and renders them on the underlying
-terminal. One of those could be *active*, meaning it will receive *keyboard input*
-from the surrounding terminal.
+*tmux* creates (one or many) *pseudo terminals* (*ptys*), and renders them on the
+underlying terminal. One of those could be *active*, meaning it will receive
+*keyboard input* from the surrounding terminal.
 
 The fancy term for this whole voodoo is *terminal multiplexing*, where *tmux*
 derives its name from.
@@ -318,15 +317,15 @@ derives its name from.
 ## Terminal Multiplexing
 
 ```text
-   ┌──────────────────┐   ┌──────────────────┐
-   │       bash       │   │       vim        │
-   └─────────┬────────┘   └─────────┬────────┘
-             │                      │
-   ┌─────────┴────────┐   ┌─────────┴────────┐
-   │ virtual terminal │   │ virtual terminal │             …
-   └─────────┬────────┘   └─────────┬────────┘
-             │                      │                      │
-   ┌─────────┴──────────────────────┴──────────────────────┴─────────┐   
+   ┌──────────────────┐   ┌────────────────────┐
+   │       bash       │   │        vim         │
+   └─────────┬────────┘   └──────────┬─────────┘
+             │                       │
+   ┌─────────┴─────────┐   ┌─────────┴─────────┐
+   │  pseudo terminal  │   │  pseudo terminal  │           …
+   └─────────┬─────────┘   └─────────┬─────────┘
+             │                       │                     │
+   ┌─────────┴───────────────────────┴─────────────────────┴─────────┐   
    │                              tmux                               │
    └────────────────────────────────┬────────────────────────────────┘
                                     │
@@ -344,7 +343,7 @@ derives its name from.
 The other main feature of *tmux*, beside the window management,
 are *detachable sessions*.
 
-This means that the applications currently running in *tmux'* virtual terminals
+This means that the applications currently running in *tmux'* pseudo terminals
 can be kept alive, even when the surrounding terminal vanishes.
 
 Typical scenarios for this are:
@@ -356,7 +355,7 @@ Typical scenarios for this are:
 
 ### Concepts
 
-- *session*: group of virtual terminals and the applications running in them
+- *session*: collection of pseudo terminals and the applications running in them
 - *detaching*: dropping the connection to the underlying terminal
   (while keeping the *session* alive)
 - *(re-)attaching*: resurrecting a session from the background
@@ -370,7 +369,7 @@ Typical scenarios for this are:
     └───┬────┘  └───┬────┘            └───┬────┘  └───┬────┘  └───┬────┘
         │           │                     │           │           │
     ┌───┴────┐  ┌───┴────┐            ┌───┴────┐  ┌───┴────┐  ┌───┴────┐
-    │ v-term │  │ v-term │            │ v-term │  │ v-term │  │ v-term │
+    │  pty   │  │  pty   │            │  pty   │  │  pty   │  │  pty   │
     └───┬────┘  └───┬────┘            └───┬────┘  └───┬────┘  └───┬────┘
         │           │                     │           │           │
    ┌────┴───────────┴──────┐         ┌────┴───────────┴───────────┴─────┐   
@@ -414,14 +413,14 @@ Typical scenarios for this are:
 
 - tmux *key bindings*
     - always begin with a *prefix* key combination
-    - default prefix: `<^B>` (this means `<Ctrl>` + `<b>` at the same time)
-    - `screen` veterans remap this to `<^A>`: `set-option -g prefix C-a`
+    - default prefix: `<C-B>` (this means `<Ctrl>` + `<b>` at the same time)
+    - `screen` veterans remap this to `<C-A>`: `set-option -g prefix C-a`
     - in the following, `<prefix>` `<key>` means:
       press *prefix* combo (e.g. `<Ctrl>` + `<b>`), release, press `<key>`
 
 - tmux *command prompt*: in running client, `<prefix>` `<:>`
     - enter any tmux *command* to execute it
-    - has basic completion (`<tab>`) and history navigation (`<up>`/`<down>`)
+    - has basic completion (`<Tab>`) and history navigation (`<Up>`/`<Down>`)
 
 - automated via *config file* (`.tmux.conf`)
     - is just a list of tmux *commands* executed sequentially
@@ -442,7 +441,7 @@ Typical scenarios for this are:
 ### Destroy Session
 
 - when attached, close any running application
-- also close the shell (`exit` / `<^D>`) → *tmux* prints `[exited]`
+- also close the shell (`exit` / `<C-D>`) → *tmux* prints `[exited]`
 - `tmux attach` → *tmux* prints `no sessions`
 
 
@@ -487,7 +486,7 @@ Short forms:
     - there might be "holes"
 
 
-## Managing Windows
+## Window Management
 
 - *create* new windows
     - `<prefix>` `<c>` → `new-window`
@@ -507,18 +506,88 @@ Short forms:
 
 - *move* windows
     - `<prefix>` `<.>` → move window (prompts for index)
-    - index has to be free
+    - `swap-window -t <num>` → swap current window with window <num>
 
 
 ## Panes
 
-**CONTINUE** here
+- a *window* consists of one or many *panes*
 
-## SOMEWHERE IN PANES
+- *panes* are rectangular areas that can be arranged in various *layouts*
 
-- `<prefix>` `<!>` → `break-pane` → move *pane* to its own *window*
+- each *pane* contains a *pseudo terminal* (*pty*)
+
+- this means you can *split* a window (both vertically and horizontally)
+  and have applications/shells run side-by-side (or top/bottom, or whatever)
+
+```text
+                             ┌─────────┬────────┐
+                             │         │  bash  │
+                ･ ﾟ✧ ﾟ ☆     │         ├────────┤         nice
+               ※ split  ･    │   vim   │        │            ⧹
+            ･ ﾟ  magic ⁺ ﾟ   │         │  git   │           ԅ(≖‿≖ԅ)      
+    (ﾉ⚆_⚆)ﾉ    ﾟ⁺ ༓ ･ ☆      │         │        │
+                             └─────────┴────────┘
+```
 
 
+## Pane Management
+
+- *create* new panes
+    - `<prefix>` `<%>` → `split-window -h` → create horizontal split
+    - `<prefix>` `<">` → `split-window -v` → create vertical split
+
+- *close* panes
+    - exit application / shell within
+    - `<prefix>` `<x>` → kill current pane (prompts)
+    - `kill-pane` → kill current pane (**no prompt!**)
+
+- *navigate* between panes
+    - `<prefix>` `<Up>/<Down>/<Left>/<Right>` → move to pane by direction
+    - `<prefix>` `<o>` → move to next pane in window (cycle through)
+    - `<prefix>` `<;>` → move to previously active pane
+    - `<prefix>` `<q>` → display pane numbers, select via digit key
+
+
+## Resizing / Rearranging Panes
+
+- using predefined *window layouts*
+    - even-horizontal, even-vertical, main-horizontal, main-vertical, tiled
+    - `<prefix>` `<Space>` → cycle through layouts
+    - `<prefix>` `<M-1>–<M-5>` → directly select layout (`<M-x>` ≅ `<Alt>`+`<x>`)
+
+- *resize* pane
+    - `<prefix>` `<C-Up>/<C-Down>/<C-Left>/<C-Right>` → resize by 1 char
+    - `<prefix>` `<M-Up>/<M-Down>/<M-Left>/<M-Right>` → resize by 5 chars
+
+- making a pane *fullscreen*
+    - `<prefix>` `<z>` → toggle *zoom* for a pane (stays in window)
+    - `<prefix>` `<!>` → `break-pane` → move *pane* to its own *new window*
+
+- *move* pane around
+    - `<prefix>` `<{>` → *swap* current pane with *previous*
+    - `<prefix>` `<}>` → *swap* current pane with *next*
+
+
+## Controlling Panes vimtuitively
+
+```sh
+# hjkl pane traversal            #      ,--------------------------.
+bind-key h select-pane -L        #     / Looks like you are trying  \
+bind-key j select-pane -D        #    |  to use tmux like vim.       |  
+bind-key k select-pane -U        #     \ Would you like help?       /
+bind-key l select-pane -R        #      `--------------------------'
+                                 #           \  __
+# HJKL pane resizing             #             /  \
+bind-key H resize-pane -L 4      #             |  |
+bind-key J resize-pane -D 4      #             @  @
+bind-key K resize-pane -U 4      #             |  |
+bind-key L resize-pane -R 4      #             || |/
+                                 #             || ||
+# splitting with s and v         #             |\_/|
+bind-key s split-window          #             \___/
+bind-key v split-window -h       #
+```
 
 
 
@@ -545,13 +614,13 @@ How to make delicious copypasta using only your keyboard (completely organic).
 
 - *move cursor* to mark *start* position
 
-- `<space>` to *start selection*
+- `<Space>` to *start selection*
 
 - *move cursor* to mark *end* position
 
-- `<enter>` to copy selection into *buffer*
+- `<Enter>` to copy selection into *buffer*
 
-- `<esc>`/`<q>` at any point to *cancel*
+- `<Esc>`/`<q>` at any point to *cancel*
 
 
 ## *Paste* Text from a *tmux Buffer*
@@ -574,9 +643,9 @@ How to make delicious copypasta using only your keyboard (completely organic).
 
 - `<prefix>` `<=>` → *choose* buffer (*awesome!*)
 
-    - `<up>`/`<down>`, `<k>`/`<j>` → go through buffers
+    - `<Up>`/`<Down>`, `<k>`/`<j>` → go through buffers
     - content of selected buffer shown in bottom pane
-    - `<enter>` → *paste*
+    - `<Enter>` → *paste*
     - `<d>` → *delete* buffer (**no undo!**)
 
 
@@ -587,7 +656,7 @@ How to make delicious copypasta using only your keyboard (completely organic).
 - use crazy cursor *movements*
     - `<h>`, `<j>`, `<k>`, `<l>`, …
     - `<w>`, `<b>`, `<0>`, `<$>`, …
-    - `<^D>`, `<^U>`, `<{>`, `<}>`, …
+    - `<C-D>`, `<C-U>`, `<{>`, `<}>`, …
 - use `<V>` instead of `<space>` to start *line selection* mode
 - use `</>` to *search*
     - type search text, `<enter>` to start
