@@ -529,41 +529,55 @@ Short forms:
 
 How to make delicious copypasta using only your keyboard (completely organic).
 
-- tmux has its own paste buffers to store text
+- tmux has its own *paste buffers* to store text
+
     - those are *not* related to your OS clipboard!
-    - copying does not overwrite, but add a new buffer (stack-like)
+    - copying does not overwrite, but adds a new buffer (stack-like)
+
 - a window can be in two modes
+
     - *default* *⁤* → everything is passed to the terminal
     - *copy mode* → allows selection of the terminal content
 
 ## *Copy* Text into a *tmux Buffer*
 
 - switch to *copy mode*: `<prefix>` `<[>`
+
 - *move cursor* to mark *start* position
+
 - `<space>` to *start selection*
+
 - *move cursor* to mark *end* position
+
 - `<enter>` to copy selection into *buffer*
-- `<esc>`/`<q>` at any point to cancel
+
+- `<esc>`/`<q>` at any point to *cancel*
 
 
 ## *Paste* Text from a *tmux Buffer*
 
 - `<prefix>` `<]>` → *insert buffer* at cursor position
+
 - pretty much as if you would type the pasted text by hand
+
 - make sure that whatever runs in the active windows can deal with
   what you paste
+
     - vim in normal mode might freak out
+
     - pasting random stuff into a (root?) shell might hurt
 
 
 ## *Managing* Buffers
 
-- `<prefix>` `<#>` → *list* buffers *(pretty boring)*
-- `<prefix>` `<=>` → *choose* buffer **(awesome!)**
+- `<prefix>` `<#>` → *list* buffers (pretty boring)
+
+- `<prefix>` `<=>` → *choose* buffer (*awesome!*)
+
     - `<up>`/`<down>`, `<k>`/`<j>` → go through buffers
     - content of selected buffer shown in bottom pane
     - `<enter>` → *paste*
-    - `<d>` → *delete buffer* *(no undo!)*
+    - `<d>` → *delete* buffer (**no undo!**)
 
 
 ## Copypasta a la *vi*
