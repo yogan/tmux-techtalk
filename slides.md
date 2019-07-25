@@ -33,10 +33,10 @@ patat:
 
 - [tmux](https://github.com/tmux/tmux) is a terminal multiplexer
     - similar to [GNU Screen](https://www.gnu.org/software/screen/)
-- a window manager for the terminal
+- a *window manager* for the terminal
     - split windows
     - layouts
-- detachable sessions
+- detachable *sessions*
     - keep shell programs running
         - on a server, after logging off
         - locally, after closing a terminal
@@ -110,11 +110,10 @@ Well, actually…
 
 - when we say *terminal* today, we usually mean a *terminal emulator*
 
-- they offer *input* and *output* functionality like traditional *physical terminals*
+    - they deal with  *input* / *output* like traditional *physical terminals*
+    - they do **not** offer any *CLI*/*prompt*/*language*/… – a *shell* does that!
 
-- they do **not** offer any *CLI*/*prompt*/*language*/… – a *shell* does that!
-
-- the *POSIX terminal interface* defines the expected behavior of a *Unix* terminal
+- *POSIX terminal interface* defines the expected behavior of a *Unix* terminal
 
     - *dumb* terminal: I/O as *character streams*
 
@@ -182,7 +181,6 @@ If you just want something to play around with, try:
     - mouse selection, copy / paste
     - keyboard shortcuts
     - customization (color schemes, fonts)
-- handling of multiple instances (tabs)
 - simplified launch of different *shells*
 - integrated applications
     - e.g. *PuTTY* is both a *terminal emulator* and a *ssh client*
@@ -198,10 +196,9 @@ If you just want something to play around with, try:
     - examples: `bash`, `zsh`, `fish`, `PowerShell`, `cmd.exe`
 
 - when a shell is used *interactively*, it runs within a *terminal (emulator)*
-    - standard I/O streams `stdin`, `stdout`, and `stderr` are by default
-      connected to the surrounding terminal
-    - shell does not "see" the output of commands it runs
-      → *scrollback* (output history) is a *terminal* concept!
+    - input/output is *connected* to the surrounding *terminal*
+    - shell does not "see" the output of the commands it runs
+      → providing *scrollback* (output history) is a *terminal* responsibility
     - *terminal control* is passed to started applications
 
 - shells and terminals can be arbitrarily mixed):
@@ -219,10 +216,10 @@ If you just want something to play around with, try:
 - shells usually print some kind of *prompt* near the place where the user
   can enter *commands*
 
-- offers *entering* / *editing* a *command line* (often via the `readline` lib)
+- user *enters* / *edits* a *command line* (often via the `readline` lib),
   that gets *interpreted* according to the *shell language* syntax
 
-- convenience features like *completion*, *command history*, *keyboard shortcuts*, …
+- convenience features: *completion*, *command history*, *keyboard shortcuts*, …
 
 - *non-shell programs* can also offer their own *CLIs*
 
@@ -236,19 +233,19 @@ If you just want something to play around with, try:
 
 - a *text-based user interface (TUI)* is a form of user interface used by
   applications that makes only use of text (including drawing characters)
-  instead of graphical UI elements (in contrast to to *GUIs*)
+  instead of graphical UI elements (in contrast to *GUIs*)
 
-- run inside *terminals*, usually started from a *shell*
+- run inside *terminals*, often started from a *shell*
 
-- often fill the whole terminal
+- usually fill the whole terminal
 
-- re-create UI elements known from GUIs like menus and windows by using
-  *box-drawing characters*, *foreground*/*background* colors
+- re-create UI elements known from GUIs like *menus* and *windows* by using
+  *box-drawing characters*, *reverse text mode* and *colors*
 
 - can be implemented by sending (ANSI) *escape sequences* to put the cursor
   at arbitrary screen positions, set colors, etc.
     - usually via a library like *ncurses*
-    - sends correct control characters depending on the used terminal
+    - specific control characters depend on the used terminal
 
 - notable examples: `vim`, `mutt`, MS-DOS Editor, Midnight Commander,
   `irssi`, `patat` (what you see right now), and also: `tmux`!
@@ -292,13 +289,15 @@ is to GUI applications.
     - tmux calls those tabs *windows*
 - *sessions*
     - group related applications, e.g. for different projects
-    - comparable to how some people use *virtual desktops* in GUI window managers
+    - comparable to how some folks use *virtual desktops* in GUI window managers
 
 
 ## Layers on Layers on Layers on…
 
 ```text
- Yo dawg, I herd you like terminals, so we put a terminal in yo terminal. 
+«Yo dawg, I herd u like terminals, so we put a terminal in yo terminal.»
+
+                                           — Xzibit, Command Line Wizard
 ```
 
 *tmux*, like *terminal emulators*, is a software-based terminal.
@@ -307,11 +306,12 @@ However, it is kind of special: it needs *another terminal* to run inside.
 You usually start *tmux* from a shell, running in a terminal.
 
 *tmux* creates (one or many) *pseudo terminals* (*ptys*), and renders them on the
-underlying terminal. One of those could be *active*, meaning it will receive
+underlying terminal (which could also be a *pty*!).
+One of those pseudo terminals is usually *active*, meaning it will receive the
 *keyboard input* from the surrounding terminal.
 
-The fancy term for this whole voodoo is *terminal multiplexing*, where *tmux*
-derives its name from.
+The fancy term for this black magic is *terminal multiplexing*.
+This is where *tmux* derives its name from.
 
 
 ## Terminal Multiplexing
@@ -322,16 +322,16 @@ derives its name from.
    └─────────┬────────┘   └──────────┬─────────┘
              │                       │
    ┌─────────┴─────────┐   ┌─────────┴─────────┐
-   │  pseudo terminal  │   │  pseudo terminal  │           …
+   │  pseudo terminal  │   │  pseudo terminal  │         …
    └─────────┬─────────┘   └─────────┬─────────┘
-             │                       │                     │
-   ┌─────────┴───────────────────────┴─────────────────────┴─────────┐   
-   │                              tmux                               │
-   └────────────────────────────────┬────────────────────────────────┘
-                                    │
-                    ┌───────────────┴───────────────┐
-                    │           Terminal            │
-                    └───────────────────────────────┘
+             │                       │                   │
+   ┌─────────┴───────────────────────┴───────────────────┴────────┐   
+   │                             tmux                             │
+   └──────────────────────────────┬───────────────────────────────┘
+                                  │
+                  ┌───────────────┴───────────────┐
+                  │           terminal            │
+                  └───────────────────────────────┘
 ```
 
 
@@ -364,20 +364,20 @@ Typical scenarios for this are:
 ## Attached and Detached Sessions
 
 ```text
-    ┌────────┐  ┌────────┐            ┌────────┐  ┌────────┐  ┌────────┐
-    │  vim   │  │  fish  │            │  node  │  │  jest  │  │  htop  │
-    └───┬────┘  └───┬────┘            └───┬────┘  └───┬────┘  └───┬────┘
-        │           │                     │           │           │
-    ┌───┴────┐  ┌───┴────┐            ┌───┴────┐  ┌───┴────┐  ┌───┴────┐
-    │  pty   │  │  pty   │            │  pty   │  │  pty   │  │  pty   │
-    └───┬────┘  └───┬────┘            └───┬────┘  └───┬────┘  └───┬────┘
-        │           │                     │           │           │
-   ┌────┴───────────┴──────┐         ┌────┴───────────┴───────────┴─────┐   
-   │ attached tmux session │         │      detached tmux session       │
-   └──────────┬────────────┘         └────────────────┬─────────────────┘
-        ┌─────┴──────┐                                ×
-        │  Terminal  │
-        └────────────┘
+   ┌────────┐  ┌────────┐          ┌────────┐  ┌────────┐  ┌────────┐
+   │  vim   │  │  fish  │          │  node  │  │  jest  │  │  htop  │
+   └───┬────┘  └───┬────┘          └───┬────┘  └───┬────┘  └───┬────┘
+       │           │                   │           │           │
+   ┌───┴────┐  ┌───┴────┐          ┌───┴────┐  ┌───┴────┐  ┌───┴────┐
+   │  pty   │  │  pty   │          │  pty   │  │  pty   │  │  pty   │
+   └───┬────┘  └───┬────┘          └───┬────┘  └───┬────┘  └───┬────┘
+       │           │                   │           │           │
+  ┌────┴───────────┴──────┐       ┌────┴───────────┴───────────┴─────┐  
+  │ attached tmux session │       │      detached tmux session       │
+  └──────────┬────────────┘       └────────────────┬─────────────────┘
+       ┌─────┴──────┐                              ×
+       │  Terminal  │
+       └────────────┘
 ```
 
 ## Client / Server
@@ -414,18 +414,17 @@ Typical scenarios for this are:
 - tmux *key bindings*
     - always begin with a *prefix* key combination
     - default prefix: `<C-B>` (this means `<Ctrl>` + `<b>` at the same time)
-    - `screen` veterans remap this to `<C-A>`: `set-option -g prefix C-a`
+    - `screen` veterans remap this to `<C-A>` with `set-option -g prefix C-a`
     - in the following, `<prefix>` `<key>` means:
       press *prefix* combo (e.g. `<Ctrl>` + `<b>`), release, press `<key>`
 
 - tmux *command prompt*: in running client, `<prefix>` `<:>`
     - enter any tmux *command* to execute it
-    - has basic completion (`<Tab>`) and history navigation (`<Up>`/`<Down>`)
+    - basic completion (`<Tab>`) and history navigation (`<Up>`/`<Down>`)
 
 - automated via *config file* (`.tmux.conf`)
-    - is just a list of tmux *commands* executed sequentially
-    - same syntax as in *command prompt* or when binding keys
-    - evaluate a config while tmux is running: `source-file ~/.tmux.conf`
+    - list of tmux *commands* executed sequentially (syntax as in *prompt*)
+    - evaluate config while tmux is running: `source-file ~/.tmux.conf`
 
 
 ## The Basics
@@ -434,15 +433,19 @@ Typical scenarios for this are:
 
 - start new *tmux* session and attach: `tmux`
 - single window, running a fresh instance of your default *shell*
-- do shell stuff (ideally start anything that keeps running, e.g. `vim` or `top`)
-- *detach*: `<prefix>` `<d>` → *tmux* prints `[detached (from session n)]`
-- *re-attach*: `tmux attach` → yay, my shell thingy is alive and kicking!
+- do shell stuff (ideally start sth. that keeps running, like `top`)
+- *detach*: `<prefix>` `<d>`
+   → *tmux* prints `[detached (from session n)]`
+- *re-attach*: `tmux attach`
+   → yay, my shell thingy is alive and kicking!
 
 ### Destroy Session
 
 - when attached, close any running application
-- also close the shell (`exit` / `<C-D>`) → *tmux* prints `[exited]`
-- `tmux attach` → *tmux* prints `no sessions`
+- also close the shell (`exit` / `<C-D>`)
+   → *tmux* prints `[exited]`
+- `tmux attach`
+   → *tmux* prints `no sessions`
 
 
 ## Session Commands
@@ -495,8 +498,7 @@ Short forms:
 - *close* windows
     - exit all applications / shells within
     - `<prefix>` `<&>` → kill current window (prompts)
-    - `kill-window -t <index>` → kill window with given index (**no prompt!**)
-    - closing a window does not change indices remaining windows (→ hole)
+    - `kill-window -t <index>` → kill window with given index (**no prompt!**) ☠
 
 - *navigate* between windows
     - `<prefix>` `<n>` → `next-window`
@@ -506,7 +508,7 @@ Short forms:
 
 - *move* windows
     - `<prefix>` `<.>` → move window (prompts for index)
-    - `swap-window -t <num>` → swap current window with window <num>
+    - `swap-window -t <num>` → swap current window with window `<num>`
 
 
 ## Panes
@@ -521,13 +523,13 @@ Short forms:
   and have applications/shells run side-by-side (or top/bottom, or whatever)
 
 ```text
-                             ┌─────────┬────────┐
-                             │         │  bash  │
-                ･ ﾟ✧ ﾟ ☆     │         ├────────┤         nice
-               ※ split  ･    │   vim   │        │            ⧹
-            ･ ﾟ  magic ⁺ ﾟ   │         │  git   │           ԅ(≖‿≖ԅ)      
-    (ﾉ⚆_⚆)ﾉ    ﾟ⁺ ༓ ･ ☆      │         │        │
-                             └─────────┴────────┘
+                            ┌─────────┬────────┐
+                            │         │  bash  │
+               ･ ﾟ✧ ﾟ ☆     │         ├────────┤        nice
+              ※ split  ･    │   vim   │        │           ⧹
+           ･ ﾟ  magic ⁺ ﾟ   │         │  git   │          ԅ(≖‿≖ԅ)       
+   (ﾉ⚆_⚆)ﾉ    ﾟ⁺ ༓ ･ ☆      │         │        │
+                            └─────────┴────────┘
 ```
 
 
@@ -540,7 +542,7 @@ Short forms:
 - *close* panes
     - exit application / shell within
     - `<prefix>` `<x>` → kill current pane (prompts)
-    - `kill-pane` → kill current pane (**no prompt!**)
+    - `kill-pane` → kill current pane (**no prompt!**) ☠
 
 - *navigate* between panes
     - `<prefix>` `<Up>/<Down>/<Left>/<Right>` → move to pane by direction
@@ -554,7 +556,7 @@ Short forms:
 - using predefined *window layouts*
     - even-horizontal, even-vertical, main-horizontal, main-vertical, tiled
     - `<prefix>` `<Space>` → cycle through layouts
-    - `<prefix>` `<M-1>–<M-5>` → directly select layout (`<M-x>` ≅ `<Alt>`+`<x>`)
+    - `<prefix>` `<M-1>–<M-5>` → select layout (`<M-x>` ≅ `<Alt>`+`<x>`)
 
 - *resize* pane
     - `<prefix>` `<C-Up>/<C-Down>/<C-Left>/<C-Right>` → resize by 1 char
@@ -652,18 +654,22 @@ How to make delicious copypasta using only your keyboard (completely organic).
 ## Copypasta a la *vi*
 
 - enable super powers with `set-window-option -g mode-keys vi`
-    - ideally globally in `.tmux.conf`
+    - e.g. in `.tmux.conf`
+
 - use crazy cursor *movements*
     - `<h>`, `<j>`, `<k>`, `<l>`, …
     - `<w>`, `<b>`, `<0>`, `<$>`, …
     - `<C-D>`, `<C-U>`, `<{>`, `<}>`, …
+
 - use `<V>` instead of `<space>` to start *line selection* mode
+
 - use `</>` to *search*
     - type search text, `<enter>` to start
     - `<n>`/`<N>` = next/prev result
     - unfortunately cancels selection mode
 
-### Copypasta della *Emacs*
+
+## Copypasta della *Emacs*
 
 - also exists ¯\\\_(ツ)\_/¯
 
@@ -744,18 +750,17 @@ done
 Automatically create sessions based on a *yaml* configuration.
 
 ```yaml
-name: yannis
-root: ~/work/yannis/shc-yannis
+root: ~/work/latest-web-shit
 startup_window: git
 windows:
     - run:
         panes:
             - cd frontend; npm run start
-            - cd mock-server; npm run build && npm run start-bootstrapped
-    - ut:
+            - cd server; npm run build && npm run start
+    - test:
         panes:
             - cd frontend; npm run test
-            - cd mock-server; npm run test
+            - cd server; npm run test
     - git:
         panes:
             - git status
