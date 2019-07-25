@@ -271,7 +271,135 @@ Also referred to when an application is sending text to an output stream like
 necessarily, leads to the text being displayed in the terminal.
 
 
-# Sessions
+
+# So what the **%#$&** is *tmux*, then?
+
+
+## *tmux* – A Window Manger for the Terminal
+
+*tmux* is to terminal applications what a *window manager* / desktop environment
+is to GUI applications.
+
+- *multitasking*
+    - run terminal applications in parallel
+
+- *window management*
+    - align applications side-by-side, in a grid, etc.
+    - tmux calls those split areas *panes*
+- *tabs*
+    - similar to browser tabs: they occupy the whole terminal
+    - can be split into *panes* (see above)
+    - tmux calls those tabs *windows*
+- *sessions*
+    - group related applications, e.g. for different projects
+    - comparable to how some people use *virtual desktops* in GUI window managers
+
+
+## Layers on Layers on Layers on…
+
+```text
+ Yo dawg, I herd you like terminals, so we put a terminal in yo terminal. 
+```
+
+*tmux*, like *terminal emulators*, is a software-based terminal.
+
+However, it is kind of special: it needs *another terminal* to run inside.
+So you usually start *tmux* from a shell, running in a terminal.
+To get another terminal in your terminal, yo.
+
+It provides (one or many) *virtual terminals*, and renders them on the underlying
+terminal. One of those could be *active*, meaning it will receive *keyboard input*
+from the surrounding terminal.
+
+The fancy term for this whole voodoo is *terminal multiplexing*, where *tmux*
+derives its name from.
+
+
+## Terminal Multiplexing
+
+```text
+   ┌──────────────────┐   ┌──────────────────┐
+   │       bash       │   │       vim        │
+   └─────────┬────────┘   └─────────┬────────┘
+             │                      │
+   ┌─────────┴────────┐   ┌─────────┴────────┐
+   │ virtual terminal │   │ virtual terminal │             …
+   └─────────┬────────┘   └─────────┬────────┘
+             │                      │                      │
+   ┌─────────┴──────────────────────┴──────────────────────┴─────────┐   
+   │                              tmux                               │
+   └────────────────────────────────┬────────────────────────────────┘
+                                    │
+                    ┌───────────────┴───────────────┐
+                    │           Terminal            │
+                    └───────────────────────────────┘
+```
+
+
+
+# Server, Clients, Sessions
+
+## Sessions
+
+The other main feature of *tmux*, beside the window management,
+are *detachable sessions*.
+
+This means that the applications currently running in *tmux'* virtual terminals
+can be kept alive, even when the surrounding terminal vanishes.
+
+Typical scenarios for this are:
+
+- closing the graphical terminal emulator
+- logging off a remote server (or loosing the connection)
+- switching to another project, but easily come back to the group of currently
+  running terminal applications later (without killing/restarting them)
+
+### Concepts
+
+- *session*: group of virtual terminals and the applications running in them
+- *detaching*: dropping the connection to the underlying terminal
+  (while keeping the *session* alive)
+- *(re-)attaching*: resurrecting a session from the background
+
+
+## Attached and Detached Sessions
+
+```text
+    ┌────────┐  ┌────────┐            ┌────────┐  ┌────────┐  ┌────────┐
+    │  vim   │  │  fish  │            │  node  │  │  jest  │  │  htop  │
+    └───┬────┘  └───┬────┘            └───┬────┘  └───┬────┘  └───┬────┘
+        │           │                     │           │           │
+    ┌───┴────┐  ┌───┴────┐            ┌───┴────┐  ┌───┴────┐  ┌───┴────┐
+    │ v-term │  │ v-term │            │ v-term │  │ v-term │  │ v-term │
+    └───┬────┘  └───┬────┘            └───┬────┘  └───┬────┘  └───┬────┘
+        │           │                     │           │           │
+   ┌────┴───────────┴──────┐         ┌────┴───────────┴───────────┴─────┐   
+   │ attached tmux session │         │      detached tmux session       │
+   └──────────┬────────────┘         └────────────────┬─────────────────┘
+        ┌─────┴──────┐                                ×
+        │  Terminal  │
+        └────────────┘
+```
+
+## Client / Server
+
+- sessions are managed by a single *server*
+
+- displayed (i.e. *attached* session) are handled by a *client*
+
+- client/server communication via socket (`/tmp/tmux-$UID/default`)
+
+- usually you don't even notice that there is a server
+
+    - server is *started* (forked) when *first session* is created
+    - server *keeps running* as long as sessions *exist*
+    - server is *terminated* when the last session is *destroyed*
+
+- explicitly start the server without a session: `tmux start-server`
+- explicitly kill the server (and all of its sessions): `tmux kill-server` ☠
+
+- configuration (`~/.tmux.conf`) is read when the server is *started*
+    - can be re-evaluated later with the `source-file` command
 
 
 ## Session Commands
@@ -309,6 +437,9 @@ TODO: ensure those are defaults (not customized mappings)
     - move around cursor keys or vi-style
     - start search with `</>`
 
+- `<prefix>` `<!>` → `break-pane` → move *pane* to its own *window*
+
+- `<prefix>` `<s>` → `choose-tree` → show tree of sessions, windows, and panes
 
 
 # Buffers
