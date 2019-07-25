@@ -708,6 +708,28 @@ right away with `</>` (no prefix required).
     - same tree as in `choose-tree`, but filtered
 
 
+## Scripting
+
+```bash
+#!/bin/bash
+if [ -z "$1" ] ; then
+    echo "Usage: $(basename $0) <KEY>"
+    echo
+    echo "<KEY> might be e.g. 'C-c' for ^C."
+    exit 1
+fi
+
+key="$1"
+
+for pane in $(tmux list-panes -s -F '#{pane_id}'); do
+    tmux send-keys -t ${pane} "${key}"
+done
+```
+
+```sh
+> tmux-send-to-all-panes.sh 'C-d'
+```
+
 
 # tmuxinator
 
