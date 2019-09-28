@@ -1,6 +1,6 @@
 ---
 title: ░▒▓ tmux Tech Talk ▓▒░
-author: ⦀ Frank Blendinger ⦀
+author: ⦀ Frank Blendinger ⦀ @yooogan ⦀
 patat:
   slideLevel: 2
   margins:
