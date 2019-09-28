@@ -1,12 +1,16 @@
 # tmux Tech Talk
 
-Slides for a tech talk on [tmux](https://github.com/tmux/tmux).
+A talk on **[tmux](https://github.com/tmux/tmux)**, a terminal multiplexer.  
+With a not-so-short introduction to the history of terminals.
 
-The slides are rendered in a terminal via
-[patat](https://github.com/jaspervdj/patat). The slides themselves are written
-in *Markdown*, so they are also [readable right here](slides.md).
+Go *[here to read the slides](slides.md)*.
 
-## Setup
+## Presentation Slides Setup
+
+The presentation is rendered in a terminal via
+[patat](https://github.com/jaspervdj/patat).  
+ The slides themselves are written in markdown, so they are also
+ [readable right here](slides.md).
 
 - [install patat](https://github.com/jaspervdj/patat#installation), preferably
   from source
@@ -16,3 +20,4 @@ in *Markdown*, so they are also [readable right here](slides.md).
     - `cd ~/src && git clone git@github.com:jaspervdj/patat.git`
     - `stack setup && stack install` *(this takes quite some time)*
 - `patat -w slides.md`
+
