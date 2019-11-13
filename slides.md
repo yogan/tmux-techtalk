@@ -272,7 +272,7 @@ necessarily, leads to the text being displayed in the terminal.
 # So what the **%#$&** is *tmux*, then?
 
 
-## *tmux* – A Window Manger for the Terminal
+## *tmux* – A Window Manager for the Terminal
 
 *tmux* is to terminal applications what a *window manager* / desktop environment
 is to GUI applications.
