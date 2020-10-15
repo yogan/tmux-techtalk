@@ -176,8 +176,8 @@ If you just want something to play around with, try:
 
 ### Distinctive Features
 
-- *Ūñíçø𝐝𝑒* support (hopefully)
-- maybe even *Emoji* 💩 (not for me)
+- *Ūñíçø𝐝ə* ⧉ ᚠᛟᛝ ⭾ ⨋x²⋞∞
+- *Emoji*   👉🐒🧠💩👌
 - extended term *capabilities*: 256 colors / 24 bit colors, images
 
 - look and feel
