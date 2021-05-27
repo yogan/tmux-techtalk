@@ -141,6 +141,9 @@ Well, actually…
 
 - Linux uses (UNIX 98) *pseudoterminals* (*PTYs*) via `/dev/pts/*`
 
+- great article on TTYs and their Linux implementation:
+  [The TTY demystified](https://www.linusakesson.net/programming/tty) by Linus Åkesson
+
 - Windows added the [ConPTY API](https://devblogs.microsoft.com/commandline/windows-command-line-introducing-the-windows-pseudo-console-conpty/) in 1803
     - without that API, terminal emulators had to implement the full
       pseudoterminal functionality on their own
