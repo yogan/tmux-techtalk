@@ -1,6 +1,6 @@
 ---
 title: ░▒▓ tmux Tech Talk ▓▒░
-author: ⦀ Frank Blendinger ⦀ @yooogan ⦀
+author: ⦀ Frank Blendinger ⦀ github.com/yogan/tmux-techtalk ⦀
 patat:
   slideLevel: 2
   margins:
@@ -173,8 +173,8 @@ If you just want something to play around with, try:
 
 ## Notable Terminal Emulators
 
-- *Linux*: Linux console, xterm, (u)rxvt, GNOME Terminal, konsole
-- *macOS*: Terminal, iTerm2, Terminator
+- *Linux*: Linux console, xterm, (u)rxvt, Alacritty, Kitty
+- *macOS*: Terminal, iTerm2, GhosTTY
 - *Windows*: (Windows Console), Windows Terminal, mintty, PuTTY, ConEmu
 
 ### Distinctive Features
@@ -460,7 +460,7 @@ Long forms:
 
 - `tmux new-session -s <name>`
 - `tmux attach-session -t <name>`
-- `tmux list-lessions`
+- `tmux list-sessions`
 
 Short forms:
 
@@ -474,7 +474,8 @@ Short forms:
 - when no *session name* is passed, *tmux* will just assign numbers when
   creating sessions
 - existing sessions can be rename with `rename-session`
-- the `attach` command defaults to the last recently used unattached session
+- the `attach` command defaults to the last recently created unattached
+  session
 
 
 # Windows & Panes
@@ -753,7 +754,7 @@ done
 
 ## tmuxinator
 
-Automatically create sessions based on a *yaml* configuration.
+Automatically create sessions based on a *YAML* configuration.
 
 ```yaml
 root: ~/work/latest-web-shit
@@ -770,7 +771,7 @@ windows:
     - git:
         panes:
             - git status
-            - git lag --branches -20
+            - git log --one-line -20
 ```
 
 
