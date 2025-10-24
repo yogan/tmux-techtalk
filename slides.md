@@ -36,16 +36,24 @@ patat:
 
 - [tmux](https://github.com/tmux/tmux) is a terminal multiplexer
     - similar to [GNU Screen](https://www.gnu.org/software/screen/)
+
+. . .
+
 - a *window manager* for the terminal
     - split windows
     - layouts
+
+. . .
+
 - detachable *sessions*
     - keep shell programs running
         - on a server, after logging off
         - locally, after closing a terminal
     - re-attach later, find everything as you left it
-- scripting / automation / customization / taka-taka
 
+. . .
+
+- scripting / automation / customization / taka-taka
 
 
 # Terminal ⇄ Shell ⇄ Command Line ⇄ CLI ⇄ TUI ⇄ Console
@@ -71,6 +79,8 @@ patat:
 
 *Command line*, *terminal*, *shell*, *console* – they are all the same, right?
 
+. . .
+
 Well, actually…
 
 
@@ -79,9 +89,15 @@ Well, actually…
 - provides *input*/*output* to a computer system
     - external hardware device
     - connection typically via serial port or null modem cables
+
+. . .
+
 - originated in the 60s (IBM / DEC mainframes)
     - *hard-copy* terminals: typewriters / printers (*output* ≅ paper)
     - *TTY* actually stands for *TeleTYpewriter*
+
+. . .
+
 - shift to *visual display units* (VDUs) in late 60s / early 70s
     - nicknamed "glass TTYs"
     - possibility to set *cursor position*
@@ -98,6 +114,9 @@ Well, actually…
     - different incompatible command sequences
     - *Unix* systems introduce `termcap`/`terminfo` files and
       the `$TERM` variable to deal with this mess
+
+. . .
+
 - DEC *VT100* (1978)
     - one of the most common terminals
     - "advanced" features:
@@ -105,8 +124,12 @@ Well, actually…
         - box-drawing characters: `┘ ┐ ┌ └ ┼ ─ ├ ┤ ┴ ┬ │`
     - command codes compliant with *ANSI X3.64*
     - emulated by pretty much every modern terminal emulator
+
+. . .
+
 - DEC *VT220* (1983)
-    - more crazy stuff, but we'll have to skip that today…
+    - 8-bit support for multinational character sets
+    - new control sequences like selective erase
 
 
 ## Terminal Emulators
@@ -116,6 +139,8 @@ Well, actually…
     - they deal with  *input* / *output* like traditional *physical terminals*
     - they do **not** offer any *CLI*/*prompt*/*language*/… – a *shell* does that!
 
+. . .
+
 - *POSIX terminal interface* defines the expected behavior of a *Unix* terminal
 
     - *dumb* terminal: I/O as *character streams*
@@ -123,6 +148,7 @@ Well, actually…
     - *capabilities*
         - *terminfo*, *termcap* (databases) / (*n*)*curses* (library)
         - *control chars* / *escape codes* (text attribs, colors, window title, …)
+
     - *job control*
         - `<^Z>` → `SIGTSTP`, `<^C>` → `SIGINT`
         - *terminal* handles control keys, job management is done by the *shell*
@@ -139,36 +165,40 @@ Well, actually…
 - *shells* and text-based applications (*TUIs*) also use these APIs
   (often via libraries like (*n*)*curses*)
 
+. . .
+
 - Linux uses (UNIX 98) *pseudoterminals* (*PTYs*) via `/dev/pts/*`
 
 - great article on TTYs and their Linux implementation:
   [The TTY demystified](https://www.linusakesson.net/programming/tty) by Linus Åkesson
 
-- Windows added the [ConPTY API](https://devblogs.microsoft.com/commandline/windows-command-line-introducing-the-windows-pseudo-console-conpty/) in 1803
+. . .
+
+- Windows added the [ConPTY API](https://devblogs.microsoft.com/commandline/windows-command-line-introducing-the-windows-pseudo-console-conpty/) in Win 10 1803
     - without that API, terminal emulators had to implement the full
       pseudoterminal functionality on their own
 
-## stty
-
-- Unix tool `stty` to get/set terminal capabilities
-- read `man 1 stty` if you want to understand its cryptic output and commands
-
-```sh
-> stty -a
-speed 38400 baud; rows 77; columns 65; line = 0;
-intr = ^C; quit = ^\; erase = ^?; kill = ^U; eof = ^D; # …
--parenb -parodd -cmspar cs8 -hupcl -cstopb cread -imaxbel iutf8 # …
-```
-
-If you just want something to play around with, try:
-
-```sh
-> stty -a
-> stty cols 20
-> stty -a
-```
-
-**Note:** *you will probably never ever have to deal with this, but it's cool. ;-)*
+<!-- ## stty -->
+<!---->
+<!-- - Unix tool `stty` to get/set terminal capabilities -->
+<!-- - read `man 1 stty` if you want to understand its cryptic output and commands -->
+<!---->
+<!-- ```sh -->
+<!-- > stty -a -->
+<!-- speed 38400 baud; rows 77; columns 65; line = 0; -->
+<!-- intr = ^C; quit = ^\; erase = ^?; kill = ^U; eof = ^D; # … -->
+<!-- -parenb -parodd -cmspar cs8 -hupcl -cstopb cread -imaxbel iutf8 # … -->
+<!-- ``` -->
+<!---->
+<!-- If you just want something to play around with, try: -->
+<!---->
+<!-- ```sh -->
+<!-- > stty -a -->
+<!-- > stty cols 20 -->
+<!-- > stty -a -->
+<!-- ``` -->
+<!---->
+<!-- **Note:** *you will probably never ever have to deal with this, but it's cool. ;-)* -->
 
 
 ## Notable Terminal Emulators
@@ -177,37 +207,44 @@ If you just want something to play around with, try:
 - *macOS*: Terminal, iTerm2, GhosTTY
 - *Windows*: (Windows Console), Windows Terminal, mintty, PuTTY, ConEmu
 
+. . .
+
 ### Distinctive Features
 
 - *Ūñíçø𝐝ə* ⧉ ᚠᛟᛝ ⭾ ⨋x²⋞∞
 - *Emoji*   👉🐒🧠💩👌
 - extended term *capabilities*: 256 colors / 24 bit colors, images
-
 - look and feel
     - mouse selection, copy / paste
     - keyboard shortcuts
     - customization (color schemes, fonts)
 - simplified launch of different *shells*
 - integrated applications
-    - e.g. *PuTTY* is both a *terminal emulator* and a *ssh client*
+    - e.g. *PuTTY* is both a *terminal emulator* and an *ssh client*
 
 
 ## Shell
 
 - when we say *shell*, we usually mean a *command-line shell*
 
+. . .
+ 
 - a *shell* is a user interface to the operating system
     - can be used *interactively* or automated via *scripts*
     - different shells have their own syntax / scripting languages
     - examples: `bash`, `zsh`, `fish`, `PowerShell`, `cmd.exe`
 
+. . .
+ 
 - when a shell is used *interactively*, it runs within a *terminal (emulator)*
     - input/output is *connected* to the surrounding *terminal*
     - shell does not "see" the output of the commands it runs
       → providing *scrollback* (output history) is a *terminal* responsibility
     - *terminal control* is passed to started applications
 
-- shells and terminals can be arbitrarily mixed):
+. . .
+ 
+- shells and terminals can be arbitrarily mixed:
     - `fish` shell inside an `xterm` terminal
     - `bash` shell inside a `mintty` terminal
     - `PowerShell` instance inside `ConEmu`
@@ -219,6 +256,8 @@ If you just want something to play around with, try:
 - the *command line interface* is the main user interface of any *shell*,
   but also other programs
 
+. . .
+ 
 - shells usually print some kind of *prompt* near the place where the user
   can enter *commands*
 
@@ -227,10 +266,12 @@ If you just want something to play around with, try:
 
 - convenience features: *completion*, *command history*, *keyboard shortcuts*, …
 
+. . .
+ 
 - *non-shell programs* can also offer their own *CLIs*
 
     - *REPLs* of programming languages (`node`, `python`, …)
-    - database clients
+    - database clients (`sqlite3`, `psql`, …)
     - *parameters* / *options* of a program are also a form of CLI
       (e.g. `git log --one-line -10`)
 
@@ -241,6 +282,8 @@ If you just want something to play around with, try:
   applications that makes only use of text (including drawing characters)
   instead of graphical UI elements (in contrast to *GUIs*)
 
+. . .
+
 - run inside *terminals*, often started from a *shell*
 
 - usually fill the whole terminal
@@ -248,12 +291,16 @@ If you just want something to play around with, try:
 - re-create UI elements known from GUIs like *menus* and *windows* by using
   *box-drawing characters*, *reverse text mode* and *colors*
 
+. . .
+
 - can be implemented by sending (ANSI) *escape sequences* to put the cursor
   at arbitrary screen positions, set colors, etc.
     - usually via a library like *ncurses*
     - specific control characters depend on the used terminal
 
-- notable examples: `vim`, `mutt`, MS-DOS Editor, Midnight Commander,
+. . .
+
+- notable examples: `vim`, `NeoVim`, `mutt`, MS-DOS Editor, Midnight Commander,
   `irssi`, `patat` (what you see right now), and also: `tmux`!
 
 
@@ -266,8 +313,12 @@ connected keyboard and monitor, and some form of terminal that runs in text-mode
 (fullscreen, outside of a graphical desktop environment), e.g. the *Linux
 virtual console*.
 
+. . .
+
 Another common meaning is any form of (software-based) terminal with some shell
 running inside it, e.g. the *Windows Command Prompt* running `cmd.exe`.
+
+. . .
 
 Also referred to when an application is sending text to an output stream like
 `stdout`/`stderr` ("printing something to the *console*"), which often, but not
@@ -283,16 +334,26 @@ necessarily, leads to the text being displayed in the terminal.
 *tmux* is to terminal applications what a *window manager* / desktop environment
 is to GUI applications.
 
+. . .
+
 - *multitasking*
     - run terminal applications in parallel
+
+. . .
 
 - *window management*
     - align applications side-by-side, in a grid, etc.
     - tmux calls those split areas *panes*
+
+. . .
+
 - *tabs*
     - similar to browser tabs: they occupy the whole terminal
     - can be split into *panes* (see above)
     - tmux calls those tabs *windows*
+
+. . .
+
 - *sessions*
     - group related applications, e.g. for different projects
     - comparable to how some folks use *virtual desktops* in GUI window managers
@@ -306,15 +367,22 @@ is to GUI applications.
                                            — Xzibit, Command Line Wizard
 ```
 
+
+. . .
+
 *tmux*, like *terminal emulators*, is a software-based terminal.
 
 However, it is kind of special: it needs *another terminal* to run inside.
 You usually start *tmux* from a shell, running in a terminal.
 
+. . .
+
 *tmux* creates (one or many) *pseudo terminals* (*ptys*), and renders them on the
 underlying terminal (which could also be a *pty*!).
 One of those pseudo terminals is usually *active*, meaning it will receive the
 *keyboard input* from the surrounding terminal.
+
+. . .
 
 The fancy term for this black magic is *terminal multiplexing*.
 This is where *tmux* derives its name from.
@@ -346,11 +414,15 @@ This is where *tmux* derives its name from.
 
 ## Sessions
 
-The other main feature of *tmux*, beside the window management,
-are *detachable sessions*.
+The other main feature of *tmux*, beside the window management, are *detachable
+sessions*.
+
+. . .
 
 This means that the applications currently running in *tmux'* pseudo terminals
 can be kept alive, even when the surrounding terminal vanishes.
+
+. . .
 
 Typical scenarios for this are:
 
@@ -358,6 +430,8 @@ Typical scenarios for this are:
 - logging off a remote server (or loosing the connection)
 - switching to another project, but easily come back to the group of currently
   running terminal applications later (without killing/restarting them)
+
+. . .
 
 ### Concepts
 
@@ -390,9 +464,11 @@ Typical scenarios for this are:
 
 - sessions are managed by a single *server*
 
-- displayed (i.e. *attached* session) are handled by a *client*
+- interactions with sessions are done via *clients*
 
 - client/server communication via socket (`/tmp/tmux-$UID/default`)
+
+. . .
 
 - usually you don't even notice that there is a server
 
@@ -400,8 +476,12 @@ Typical scenarios for this are:
     - server *keeps running* as long as sessions *exist*
     - server is *terminated* when the last session is *destroyed*
 
+. . .
+
 - explicitly start the server without a session: `tmux start-server`
 - explicitly kill the server (and all of its sessions): `tmux kill-server` ☠
+
+. . .
 
 - configuration (`~/.tmux.conf`) is read when the server is *started*
     - can be re-evaluated later with the `source-file` command
@@ -417,6 +497,8 @@ Typical scenarios for this are:
     - `tmux some-command [--maybe-with-options]`
     - can be executed in any shell – within or outside of a tmux session
 
+. . .
+
 - tmux *key bindings*
     - always begin with a *prefix* key combination
     - default prefix: `<C-B>` (this means `<Ctrl>` + `<b>` at the same time)
@@ -424,9 +506,13 @@ Typical scenarios for this are:
     - in the following, `<prefix>` `<key>` means:
       press *prefix* combo (e.g. `<Ctrl>` + `<b>`), release, press `<key>`
 
+. . .
+
 - tmux *command prompt*: in running client, `<prefix>` `<:>`
     - enter any tmux *command* to execute it
     - basic completion (`<Tab>`) and history navigation (`<Up>`/`<Down>`)
+
+. . .
 
 - automated via *config file* (`.tmux.conf`)
     - list of tmux *commands* executed sequentially (syntax as in *prompt*)
@@ -440,10 +526,15 @@ Typical scenarios for this are:
 - start new *tmux* session and attach: `tmux`
 - single window, running a fresh instance of your default *shell*
 - do shell stuff (ideally start sth. that keeps running, like `top`)
+
+. . .
+
 - *detach*: `<prefix>` `<d>`
    → *tmux* prints `[detached (from session n)]`
 - *re-attach*: `tmux attach`
    → yay, my shell thingy is alive and kicking!
+
+. . .
 
 ### Destroy Session
 
@@ -462,6 +553,8 @@ Long forms:
 - `tmux attach-session -t <name>`
 - `tmux list-sessions`
 
+. . .
+
 Short forms:
 
 - `tmux new -s <name>`
@@ -469,11 +562,13 @@ Short forms:
 - `tmux at -t <name>`
 - `tmux ls`
 
+. . .
+
 ### Session Names
 
 - when no *session name* is passed, *tmux* will just assign numbers when
   creating sessions
-- existing sessions can be rename with `rename-session`
+- existing sessions can be renamed with `rename-session`
 - the `attach` command defaults to the last recently created unattached
   session
 
@@ -486,9 +581,15 @@ Short forms:
     - confusingly, *tmux* calls those tabs *windows*
     - *windows* belong to a *session*
     - the tmux *status bar* lists the windows
+
+. . .
+
 - each *window* has a *name*
     - default name when windows is created (usually the shell name)
     - can be renamed (`rename-window` / `<prefix>` `<,>`)
+
+. . .
+
 - each *window* has an *index*
     - the index defines the position in the status bar
     - index can be used to directly switch to a window
@@ -502,16 +603,25 @@ Short forms:
     - `<prefix>` `<c>` → `new-window`
     - starts your login shell by default
 
+
+. . .
+
 - *close* windows
     - exit all applications / shells within
     - `<prefix>` `<&>` → kill current window (prompts)
     - `kill-window -t <index>` → kill window with given index (**no prompt!**) ☠
+
+
+. . .
 
 - *navigate* between windows
     - `<prefix>` `<n>` → `next-window`
     - `<prefix>` `<p>` → `previous-window`
     - `<prefix>` `<l>` → jump to last active window
     - `<prefix>` `<0>–<9>` → jump to window with given index
+
+
+. . .
 
 - *move* windows
     - `<prefix>` `<.>` → move window (prompts for index)
@@ -526,14 +636,16 @@ Short forms:
 
 - each *pane* contains a *pseudo terminal* (*pty*)
 
+. . .
+
 - this means you can *split* a window (both vertically and horizontally)
   and have applications/shells run side-by-side (or top/bottom, or whatever)
 
 ```text
                             ┌─────────┬────────┐
-                            │         │  bash  │
+                            │         │  fish  │
                ･ ﾟ✧ ﾟ ☆     │         ├────────┤        nice
-              ※ split  ･    │   vim   │        │           ⧹
+              ※ split  ･    │  nvim   │        │           ⧹
            ･ ﾟ  magic ⁺ ﾟ   │         │  git   │          ԅ(≖‿≖ԅ)       
    (ﾉ⚆_⚆)ﾉ    ﾟ⁺ ༓ ･ ☆      │         │        │
                             └─────────┴────────┘
@@ -546,10 +658,14 @@ Short forms:
     - `<prefix>` `<%>` → `split-window -h` → create horizontal split
     - `<prefix>` `<">` → `split-window -v` → create vertical split
 
+. . .
+
 - *close* panes
     - exit application / shell within
     - `<prefix>` `<x>` → kill current pane (prompts)
     - `kill-pane` → kill current pane (**no prompt!**) ☠
+
+. . .
 
 - *navigate* between panes
     - `<prefix>` `<Up>/<Down>/<Left>/<Right>` → move to pane by direction
@@ -565,20 +681,26 @@ Short forms:
     - `<prefix>` `<Space>` → cycle through layouts
     - `<prefix>` `<M-1>–<M-5>` → select layout (`<M-x>` ≅ `<Alt>`+`<x>`)
 
+. . .
+
 - *resize* pane
     - `<prefix>` `<C-Up>/<C-Down>/<C-Left>/<C-Right>` → resize by 1 char
     - `<prefix>` `<M-Up>/<M-Down>/<M-Left>/<M-Right>` → resize by 5 chars
 
+. . .
+
 - making a pane *fullscreen*
     - `<prefix>` `<z>` → toggle *zoom* for a pane (stays in window)
     - `<prefix>` `<!>` → `break-pane` → move *pane* to its own *new window*
+
+. . .
 
 - *move* pane around
     - `<prefix>` `<{>` → *swap* current pane with *previous*
     - `<prefix>` `<}>` → *swap* current pane with *next*
 
 
-## Controlling Panes vimtuitively
+## Controlling Panes **vim**tuitively
 
 ```sh
 # hjkl pane traversal            #      ,--------------------------.
@@ -607,14 +729,18 @@ bind-key v split-window -h       #
 
 How to make delicious copypasta using only your keyboard (completely organic).
 
+. . .
+
 - tmux has its own *paste buffers* to store text
 
     - those are *not* related to your OS clipboard!
     - copying does not overwrite, but adds a new buffer (stack-like)
 
+. . .
+
 - a window can be in two modes
 
-    - *default* *⁤* → everything is passed to the terminal
+    - *default*   → everything is passed to the terminal
     - *copy mode* → allows selection of the terminal content
 
 ## *Copy* Text into a *tmux Buffer*
@@ -694,13 +820,15 @@ right away with `</>` (no prefix required).
 
 ## Documentation
 
-- [manpage](http://man.openbsd.org/OpenBSD-current/man1/tmux.1) (`man tmux`)
+- [manpage](https://man7.org/linux/man-pages/man1/tmux.1.html) (`man tmux`)
     - pretty heavy, but it's the definite reference
 
 - [The Tao of tmux](https://leanpub.com/the-tao-of-tmux/read)
     - E-Book (Kindle) by Tony Narlock, free online version (see link)
 
 - [tmux FAQ](https://github.com/tmux/tmux/wiki/FAQ)
+
+. . .
 
 ### Pro Tips
 
@@ -747,6 +875,8 @@ for pane in $(tmux list-panes -s -F '#{pane_id}'); do
 done
 ```
 
+. . .
+
 ```sh
 > tmux-send-to-all-panes.sh 'C-d'
 ```
@@ -756,6 +886,8 @@ done
 
 Automatically create sessions based on a *YAML* configuration.
 
+. . .
+
 ```yaml
 root: ~/work/latest-web-shit
 startup_window: git
@@ -763,11 +895,11 @@ windows:
     - run:
         panes:
             - cd frontend; npm run start
-            - cd server; npm run build && npm run start
+            - cd server;   npm run build && npm run start
     - test:
         panes:
             - cd frontend; npm run test
-            - cd server; npm run test
+            - cd server;   npm run test
     - git:
         panes:
             - git status
@@ -791,8 +923,8 @@ windows:
          .°o.O.o° ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯.°o.O.o°..         
 
 
-              →   https://twitter.com/yooogan
-              →   https://github.com/yogan/tmux-techtalk
+                 https://zogan.de
+                 https://github.com/yogan/tmux-techtalk
 
 
 ```
