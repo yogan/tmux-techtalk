@@ -596,6 +596,12 @@ Short forms:
     - new windows are assigned the next free index
     - there might be "holes"
 
+. . .
+
+- config tips:
+    - `set -g base-index 1` → start window numbering at 1
+    - `set -g renumber-windows on` → shift windows to close holes
+
 
 ## Window Management
 
