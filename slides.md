@@ -729,19 +729,19 @@ bind-key v split-window -h       #
 
 # Monitoring
 
+
+## Notification on Output
+
 When you have a long-running process in a window, and want to keep working on
 something else in the meantime, you might want to be notified when the process
 completes.
 
 . . .
 
-tmux has some options to do that. Here is what I use:
-
 ```tmux
-# Activity monitoring
 bind-key m set-window-option monitor-activity
-setw -g monitor-activity off
-set  -g visual-activity  off
+setw -g monitor-activity off  # disable monitoring by default
+set  -g visual-activity  off  # don't show "Activity in window …" messages
 ```
 
 . . .
@@ -750,10 +750,43 @@ With this, you can toggle activity monitoring for the current window with
 `<prefix>` `<m>`. When the window is not active and something happens in it,
 you'll get a notification in the status bar.
 
+
+## Notification on Silence
+
+You can also get notified when there is no output in a window for a certain
+amount of time. A typical use case are either test or compilation runs that take
+a while and continuously output status updates.
+
 . . .
 
-When a bell (`^G`) is emitted in a pane of a non-active window, there will be a
-notification even without entering activity monitoring mode.
+This is achieved by enabling a window-scoped setting called `monitor-silence`,
+which can be set to a number of seconds. If there is no output in the window for
+that amount of time, you'll get a notification in the status bar.
+
+. . .
+
+Here is a way to toggle this with `<prefix> <M>`:
+
+```tmux
+bind-key M \
+  if-shell 'test "$(tmux show-window-options -v monitor-silence)" -gt 0' \
+    "setw -u monitor-silence ; display-message 'Silence monitoring: OFF'" \
+    "setw monitor-silence 10 ; display-message 'Silence monitoring: ON (10s)'"
+```
+
+
+##  Ringing the Bell
+
+As an alternative, you can also take advantage of the fact that tmux handles the
+bell escape sequence (`^G`). When this character appears in the terminal output
+of a non-active window, tmux will also flash and mark the window in the status
+bar.
+
+. . .
+
+```sh
+$ some-long-command ; tput bel
+```
 
 
 # Buffers
