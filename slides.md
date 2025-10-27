@@ -727,9 +727,36 @@ bind-key v split-window -h       #
 ```
 
 
+# Monitoring
+
+When you have a long-running process in a window, and want to keep working on
+something else in the meantime, you might want to be notified when the process
+completes.
+
+. . .
+
+tmux has some options to do that. Here is what I use:
+
+```tmux
+# Activity monitoring
+bind-key m set-window-option monitor-activity
+setw -g monitor-activity off
+set  -g visual-activity  off
+```
+
+. . .
+
+With this, you can toggle activity monitoring for the current window with
+`<prefix>` `<m>`. When the window is not active and something happens in it,
+you'll get a notification in the status bar.
+
+. . .
+
+When a bell (`^G`) is emitted in a pane of a non-active window, there will be a
+notification even without entering activity monitoring mode.
+
 
 # Buffers
-
 
 ## Paste Buffers
 
